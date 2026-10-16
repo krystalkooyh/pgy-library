@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>羅東博愛醫院藥劑科PGY教材庫</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+/* Layout: 頂部搜尋列（sticky）＋ 桌機左側分組導覽與進度；手機改為分組膠囊列。教材以「藥袋標籤」般的橫列呈現 */
+:root{
+  --bg:#f2f5f3; --surface:#ffffff; --surface-2:#e8eeea; --ink:#16211e; --muted:#56655f; --line:#d6dfda;
+  --accent:#0c6a56; --accent-ink:#ffffff; --accent-soft:#d9eee6;
+  --opd:#2c5ca4; --ipd:#a9502b; --clin:#6a4b9b;
+  --warn:#8a5d00; --warn-soft:#fbeecb; --new:#0c6a56; --new-soft:#d9eee6;
+  --shadow:0 1px 2px rgba(18,40,32,.06), 0 4px 16px rgba(18,40,32,.05);
+  --font-body:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --radius:12px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f1513; --surface:#161e1b; --surface-2:#1f2925; --ink:#e4ebe8; --muted:#97a6a0; --line:#2a3631;
+  --accent:#4dbf9f; --accent-ink:#04211a; --accent-soft:#143a30;
+  --opd:#83a9e8; --ipd:#e38d66; --clin:#b49de2;
+  --warn:#e6b94c; --warn-soft:#382d10; --new:#4dbf9f; --new-soft:#143a30;
+  --shadow:0 1px 2px rgba(0,0,0,.3);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#0f1513; --surface:#161e1b; --surface-2:#1f2925; --ink:#e4ebe8; --muted:#97a6a0; --line:#2a3631;
+  --accent:#4dbf9f; --accent-ink:#04211a; --accent-soft:#143a30;
+  --opd:#83a9e8; --ipd:#e38d66; --clin:#b49de2;
+  --warn:#e6b94c; --warn-soft:#382d10; --new:#4dbf9f; --new-soft:#143a30;
+  --shadow:0 1px 2px rgba(0,0,0,.3);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.6;-webkit-text-size-adjust:100%}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+.mono{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+
+/* ---------- header ---------- */
+.top{position:sticky;top:env(safe-area-inset-top, 0px);z-index:20;background:color-mix(in srgb, var(--bg) 88%, transparent);backdrop-filter:saturate(1.4) blur(10px);-webkit-backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
+.top-row{display:flex;align-items:center;gap:16px;padding-block:12px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0;flex-shrink:0}
+.brand-mark{width:38px;height:38px;border-radius:10px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-family:var(--font-mono);font-weight:500;font-size:16px;letter-spacing:-.02em}
+.brand b{display:block;font-size:17px;line-height:1.2;letter-spacing:.01em}
+.brand small{display:block;color:var(--muted);font-size:12px;line-height:1.3}
+.search{flex:1;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:0 14px;height:42px;min-width:0;max-width:520px;margin-left:auto}
+.search:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.search svg{flex-shrink:0;color:var(--muted)}
+.search input{flex:1;min-width:0;border:0;background:transparent;font:inherit;color:var(--ink);outline:none;height:100%}
+.search input::placeholder{color:var(--muted)}
+.account{flex-shrink:0;display:flex;align-items:center;gap:8px}
+.btn{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:14px;font-weight:500;text-decoration:none;white-space:nowrap}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.primary:hover{filter:brightness(1.08)}
+.avatar{width:30px;height:30px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;font-weight:700;font-size:13px;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.acct-name{font-size:13px;color:var(--muted);max-width:9em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.acct-note{font-size:12px;color:var(--muted);white-space:nowrap;padding:4px 10px;border:1px dashed var(--line);border-radius:999px}
+.chips{display:none;gap:8px;overflow-x:auto;padding-block:0 12px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:14px}
+.chip .mono{font-size:12px;color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip[aria-pressed="true"] .mono{color:inherit;opacity:.75}
+
+.notice{margin-top:14px;padding:10px 14px;border-radius:10px;background:var(--warn-soft);color:var(--ink);font-size:13.5px;border:1px solid color-mix(in srgb, var(--warn) 30%, transparent)}
+.notice b{color:var(--warn)}
+
+/* ---------- layout ---------- */
+.layout{display:grid;grid-template-columns:260px minmax(0,1fr);gap:32px;padding-block:24px 48px}
+.rail{position:sticky;top:calc(var(--head-h, 68px) + env(safe-area-inset-top, 0px) + 20px);align-self:start;max-height:calc(100vh - var(--head-h, 68px) - 40px);overflow:auto;display:flex;flex-direction:column;gap:6px;padding-right:4px}
+.rail-all{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border-radius:10px;border:0;background:transparent;cursor:pointer;text-align:left;font-weight:500}
+.rail-all[aria-pressed="true"],.rail-group[aria-pressed="true"]{background:var(--surface);box-shadow:var(--shadow)}
+.rail-group{display:block;width:100%;padding:10px 12px 12px;border-radius:10px;border:0;background:transparent;cursor:pointer;text-align:left}
+.rail-group .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.rail-group .name{font-weight:700;display:flex;align-items:center;gap:8px}
+.dot{width:9px;height:9px;border-radius:3px;background:var(--g);flex-shrink:0}
+.pct{font-size:12px;color:var(--muted)}
+.bar{height:5px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:var(--g, var(--accent));border-radius:inherit;transition:width .4s ease}
+.rail-units{list-style:none;margin:2px 0 10px;padding:0 0 0 29px;display:flex;flex-direction:column}
+.rail-units a{display:flex;justify-content:space-between;gap:8px;padding:4px 8px;border-radius:6px;text-decoration:none;font-size:13.5px;color:var(--muted)}
+.rail-units a:hover{color:var(--ink);background:var(--surface-2)}
+.rail-units .mono{font-size:11.5px}
+
+/* ---------- overview ---------- */
+.overview{margin-bottom:24px}
+.ov{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:20px 40px;align-items:center}
+.ov-hint{margin:12px 0 0;font-size:13px;color:var(--muted);max-width:30em}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:18px 20px;min-width:0}
+.panel h3{margin:0 0 10px;font-size:12px;font-weight:500;letter-spacing:.08em;color:var(--muted)}
+.big{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.big .num{font-family:var(--font-mono);font-size:44px;line-height:1;font-weight:500;letter-spacing:-.03em}
+.big .num small{font-size:20px;color:var(--muted)}
+.big p{margin:0;color:var(--muted);font-size:13.5px}
+.big p b{color:var(--ink);font-family:var(--font-mono);font-weight:500}
+.gbars{display:flex;flex-direction:column;gap:12px}
+.gbar{display:grid;grid-template-columns:5.5em minmax(0,1fr) 4.2em;align-items:center;gap:10px;font-size:13px}
+.gbar .bar{margin:0}
+.gbar .mono{text-align:right;font-size:12px;color:var(--muted)}
+.recent ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.recent li{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;padding:7px 0;border-top:1px dashed var(--line);font-size:13.5px}
+.recent li:first-child{border-top:0;padding-top:0}
+.recent time{font-family:var(--font-mono);font-size:12px;color:var(--muted);padding-top:2px}
+.recent a{text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.recent a:hover{text-decoration:underline}
+.recent .unit-label{grid-column:2;font-size:12px;color:var(--muted);margin-top:-4px}
+.empty-note{color:var(--muted);font-size:13.5px;margin:0}
+
+/* ---------- toolbar ---------- */
+.toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.toggle{height:32px;padding:0 12px;border-radius:999px;border:1px solid var(--line);background:transparent;cursor:pointer;font-size:13.5px;display:inline-flex;align-items:center;gap:6px}
+.toggle[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:500}
+.result-count{margin-left:auto;font-size:13px;color:var(--muted)}
+
+/* ---------- sections ---------- */
+.group-band{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin:36px 0 14px;padding-bottom:10px;border-bottom:2px solid var(--g)}
+.group-band:first-child{margin-top:0}
+.group-band h2{margin:0;font-size:22px;letter-spacing:.02em;text-wrap:balance}
+.group-band .mono{font-size:12.5px;color:var(--muted)}
+.unit{margin-bottom:18px;scroll-margin-top:calc(var(--head-h, 68px) + 20px)}
+.unit-head{display:flex;align-items:baseline;gap:10px;margin-bottom:8px}
+.unit-head h3{margin:0;font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
+.unit-head .mono{font-size:12px;color:var(--muted);margin-left:auto}
+.items{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.item{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:start;padding:14px 16px;border-top:1px solid var(--line);position:relative}
+.item:first-child{border-top:0}
+.check{width:26px;height:26px;margin-top:1px;border-radius:50%;border:1.5px solid var(--line);background:transparent;display:grid;place-items:center;cursor:pointer;color:transparent;transition:background .15s,border-color .15s}
+.check:hover{border-color:var(--accent)}
+.check[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.item-title{font-weight:500;font-size:15.5px;text-decoration:none;line-height:1.45;overflow-wrap:anywhere}
+a.item-title:hover{text-decoration:underline;text-underline-offset:3px}
+.item.read .item-title{color:var(--muted)}
+.item-desc{margin:3px 0 0;color:var(--muted);font-size:13.5px;max-width:62ch}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin-top:7px;font-size:12.5px;color:var(--muted)}
+.tag{display:inline-flex;align-items:center;height:21px;padding:0 8px;border-radius:5px;background:var(--surface-2);color:var(--ink);font-size:12px;font-weight:500;letter-spacing:.02em}
+.tag.new{background:var(--new-soft);color:var(--new)}
+.tag.warn{background:var(--warn-soft);color:var(--warn)}
+.meta time{font-family:var(--font-mono);font-size:12px}
+.actions{display:flex;gap:6px;align-items:center}
+.fb{display:inline-flex;align-items:center;gap:4px;height:34px;padding:0 10px;border-radius:8px;text-decoration:none;font-size:13px;color:var(--muted);white-space:nowrap}
+.fb:hover{color:var(--accent);background:var(--accent-soft)}
+.fb[aria-disabled="true"]{opacity:.5;pointer-events:none}
+.open{display:inline-flex;align-items:center;gap:4px;height:34px;padding:0 12px;border-radius:8px;border:1px solid var(--line);text-decoration:none;font-size:13.5px;font-weight:500;white-space:nowrap}
+.open:hover{border-color:var(--accent);color:var(--accent)}
+.open[aria-disabled="true"]{opacity:.5;pointer-events:none}
+.unit-empty{padding:14px 16px;color:var(--muted);font-size:13.5px;border:1px dashed var(--line);border-radius:var(--radius)}
+mark{background:color-mix(in srgb, var(--warn) 30%, transparent);color:inherit;border-radius:3px;padding:0 1px}
+.no-result{padding:48px 16px;text-align:center;color:var(--muted)}
+.loading{padding:48px 0;color:var(--muted)}
+
+/* ---------- footer & toast ---------- */
+.foot{border-top:1px solid var(--line);padding-block:24px 32px;font-size:13px;color:var(--muted)}
+.foot-inner{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:center;justify-content:space-between}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom, 0px));transform:translate(-50%, 20px);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s, transform .2s;max-width:calc(100vw - 32px);z-index:50}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ---------- responsive ---------- */
+@media (max-width: 900px){
+  .layout{grid-template-columns:minmax(0,1fr);padding-block:16px 40px}
+  .rail{display:none}
+  .chips{display:flex}
+}
+@media (max-width: 720px){
+  .top-row{flex-wrap:wrap;gap:10px 12px}
+  .account{margin-left:auto}
+  .brand{flex:1 1 0;min-width:0}
+  .brand b{font-size:15px;line-height:1.3}
+  .btn{padding:0 12px;font-size:13.5px}
+  .search{order:3;flex-basis:100%;max-width:none;margin-left:0}
+  .acct-name{display:none}
+  .ov{grid-template-columns:minmax(0,1fr)}
+  .big .num{font-size:38px}
+  .item{grid-template-columns:auto minmax(0,1fr);padding:14px 14px 14px 12px;gap:12px}
+  .actions{grid-column:2;margin-top:-4px}
+  .open,.fb{height:32px}
+  .group-band h2{font-size:20px}
+}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important;scroll-behavior:auto!important} }
+</style>
+</head>
+<body>
+
+<header class="top" id="top">
+  <div class="wrap">
+    <div class="top-row">
+      <a class="brand" href="#top" aria-label="回到頂端">
+        <span class="brand-mark" aria-hidden="true">Rx</span>
+        <span><b id="siteTitle">羅東博愛醫院藥劑科PGY教材庫</b></span>
+      </a>
+      <label class="search" for="q">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="搜尋教材或項目…" autocomplete="off" enterkeyhint="search">
+      </label>
+      <div class="account" id="account"></div>
+    </div>
+    <nav class="chips" id="chips" aria-label="組別"></nav>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="notice" id="notice" hidden></div>
+  <div class="layout">
+    <aside class="rail" id="rail" aria-label="組別與項目"></aside>
+    <main id="main">
+      <section class="overview" id="overview"></section>
+      <div class="toolbar" id="toolbar">
+        <button class="toggle" id="fUnread" type="button" aria-pressed="false">只看未讀</button>
+        <span class="result-count" id="count"></span>
+      </div>
+      <div id="sections"><p class="loading">教材清單載入中…</p></div>
+    </main>
+  </div>
+</div>
+
+<footer class="foot">
+  <div class="wrap foot-inner">
+    <span id="footInfo">教材清單由藥劑科教學小組維護</span>
+  </div>
+</footer>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* 設定區格式檢查：主程式若因格式錯誤無法執行，3 秒後顯示提示 */
+window.__pgyErr = '';
+window.addEventListener('error', function (e) { if (!window.__pgyBooted) window.__pgyErr = (e.message || '') + (e.lineno ? '（第 ' + e.lineno + ' 行附近）' : ''); });
+setTimeout(function () {
+  if (window.__pgyBooted) return;
+  var box = document.getElementById('sections');
+  if (box) box.innerHTML = '<div class="notice"><b>網頁設定區的格式有誤，程式無法執行。</b><br>' +
+    '請檢查 CONFIG 設定區：網址前後要有半形單引號 \' \'、每一行結尾要有半形逗號，SHEET_CSV_URL 要填「發布到網路」產生的 https:// 網址，不是電腦裡的檔案路徑。' +
+    (window.__pgyErr ? '<br><span class="mono" style="font-size:12px">錯誤訊息：' + window.__pgyErr.replace(/[<>&]/g, '') + '</span>' : '') + '</div>';
+}, 3000);
+</script>
+<script>
+window.__pgyBooted = true;
+/* =====================================================================
+   設定區：部署前只需要修改這一段
+   ===================================================================== */
+const CONFIG = {
+  SITE_TITLE: '羅東博愛醫院藥劑科PGY教材庫',
+
+  // Google 試算表「檔案 > 共用 > 發布到網路 > 教材清單 > CSV」產生的網址。
+  // 留空時會顯示示範資料。
+  SHEET_CSV_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTXyMuIjzHsHPXh_eiC_LkJP3ZN5X9ie5YAhjbVjRBbUIybKuMh29JYpz00SoxtAzj2W9jS5eaLSEuv/pub?gid=298311944&single=true&output=csv',
+
+  // 回饋表單（Google 表單）網址。每份教材旁的「回饋」按鈕會開啟這份表單。
+  FEEDBACK_FORM_URL: 'https://forms.gle/qCJaGaJNDJSag8ua8',
+  // 選填：表單中「教材名稱」題目的 entry 編號（例如 'entry.123456789'），
+  // 設定後按「回饋」時，表單會自動帶入是哪一份教材。
+  FEEDBACK_PREFILL_ENTRY: '',
+
+  // 幾天內修改過的教材標示為「近期更新」
+  NEW_DAYS: 30,
+
+  // Firebase 設定（用於 Google 登入與雲端進度）。留空 = 進度只存在使用者自己的瀏覽器。
+  // 例：{ apiKey:'...', authDomain:'xxx.firebaseapp.com', projectId:'xxx', appId:'...' }
+  FIREBASE: null,
+
+  // 組別與項目的顯示順序。試算表裡出現新的組別或項目也會自動加在後面。
+  GROUPS: [
+    { name: '門診組', color: 'opd', units: ['門診調劑','門診處方評估','門診處方藥品交付','門診病人藥品諮詢','門診行政與其他'] },
+    { name: '住急組', color: 'ipd', units: ['住院online','住院UDD','腫瘤大樓住院藥事作業','住院行政','急診藥事作業','急診大夜值班'] },
+    { name: '臨床藥學組', color: 'clin', units: ['藥事照護','藥品不良反應評估','藥物治療監測評估與建議','文獻搜尋'] },
+  ],
+};
+/* ===================================================================== */
+
+const DEMO = [
+  ['門診組','門診調劑','門診調劑作業流程','操作手冊','是','從收處方到完成調劑的每個步驟與核對點','陳藥師','2026-09-22'],
+  ['門診組','門診調劑','調劑台配置與藥品擺放原則','概念','是','認識藥架編碼、外觀相似藥品的分區方式','陳藥師','2026-05-03'],
+  ['門診組','門診調劑','高警訊藥品辨識與雙人核對','概念','是','','林藥師','2026-10-02'],
+  ['門診組','門診處方評估','處方評估重點與常見疑義','概念','是','劑量、頻次、重複用藥、交互作用的判斷順序','黃藥師','2026-08-15'],
+  ['門診組','門診處方評估','腎功能劑量調整查詢操作','操作手冊','否','','黃藥師','2026-03-11'],
+  ['門診組','門診處方藥品交付','發藥核對與用藥指導','操作手冊','是','三讀五對與交付時的衛教要點','王藥師','2026-07-30'],
+  ['門診組','門診處方藥品交付','特殊劑型交付說明（吸入劑、眼藥、貼片）','操作手冊','否','','王藥師','2026-09-28'],
+  ['門診組','門診病人藥品諮詢','用藥諮詢窗口作業','操作手冊','是','','吳藥師','2026-06-18'],
+  ['門診組','門診病人藥品諮詢','常見諮詢問題 Q&A','概念','否','','吳藥師','2026-04-02'],
+  ['門診組','門診行政與其他','管制藥品管理與帳冊','操作手冊','是','','張藥師','2026-02-20'],
+  ['住急組','住院online','住院醫囑審核操作','操作手冊','是','線上審核介面、疑義處方回覆流程','李藥師','2026-09-05'],
+  ['住急組','住院UDD','UDD 調劑與擺藥流程','操作手冊','是','','李藥師','2026-10-08'],
+  ['住急組','住院UDD','藥車交接與退藥作業','流程圖','否','','鄭藥師','2026-01-14'],
+  ['住急組','腫瘤大樓住院藥事作業','化療處方審核','概念','是','BSA 計算、累積劑量與前置給藥檢查','謝藥師','2026-09-17'],
+  ['住急組','腫瘤大樓住院藥事作業','抗癌藥品調配與個人防護','操作手冊','是','','謝藥師','2026-06-01'],
+  ['住急組','住院行政','藥品借用、歸還與盤點','操作手冊','否','','鄭藥師','2025-12-09'],
+  ['住急組','急診藥事作業','急診處方調劑流程','操作手冊','是','','許藥師','2026-08-26'],
+  ['住急組','急診藥事作業','急救車藥品管理','概念','是','','許藥師','2026-05-21'],
+  ['住急組','急診大夜值班','大夜班作業手冊','操作手冊','是','交班事項、時段工作清單與聯絡窗口','許藥師','2026-09-30'],
+  ['臨床藥學組','藥事照護','藥事照護紀錄撰寫（SOAP）','概念','是','','蔡藥師','2026-07-07'],
+  ['臨床藥學組','藥品不良反應評估','ADR 評估與 Naranjo 量表','概念','是','','楊藥師','2026-04-25'],
+  ['臨床藥學組','藥品不良反應評估','ADR 通報系統操作','操作手冊','否','','楊藥師','2026-10-05'],
+  ['臨床藥學組','藥物治療監測評估與建議','TDM 監測與建議撰寫','概念','是','採檢時間、結果判讀與建議格式','蔡藥師','2026-08-03'],
+  ['臨床藥學組','藥物治療監測評估與建議','Vancomycin AUC 劑量調整','操作手冊','否','','蔡藥師','2026-09-12'],
+  ['臨床藥學組','文獻搜尋','PubMed 搜尋技巧','操作手冊','否','','楊藥師','2026-03-30'],
+];
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store = {
+  get(k){ try { return JSON.parse(localStorage.getItem(k)); } catch(e){ return null; } },
+  set(k,v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} },
+};
+function hash(s){ let h = 0; for (const c of String(s)) h = (h*31 + c.codePointAt(0)) | 0; return (h>>>0).toString(36); }
+function idFor(link, title){
+  const m = String(link||'').match(/\/d\/(?:e\/)?([\w-]{20,})/);
+  if (m) return 'g:' + m[1];
+  if (link) return 'u:' + hash(link);
+  return 't:' + hash(title);
+}
+function parseDate(s){
+  const m = String(s||'').match(/(\d{4})[-\/.年](\d{1,2})[-\/.月](\d{1,2})/);
+  return m ? new Date(+m[1], +m[2]-1, +m[3]) : null;
+}
+const pad = n => String(n).padStart(2,'0');
+const fmtDate = d => d ? `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}` : '';
+const today = () => fmtDate(new Date());
+const yes = v => /^(是|y|yes|true|1|必讀|v|✓|o)$/i.test(String(v||'').trim());
+const no  = v => /^(否|n|no|false|0|x|隱藏)$/i.test(String(v||'').trim());
+
+function parseCSV(text){
+  const rows = []; let row = [], f = '', q = false;
+  for (let i = 0; i < text.length; i++){
+    const c = text[i];
+    if (q){
+      if (c === '"'){ if (text[i+1] === '"'){ f += '"'; i++; } else q = false; }
+      else f += c;
+    } else if (c === '"') q = true;
+    else if (c === ','){ row.push(f); f = ''; }
+    else if (c === '\n'){ row.push(f); rows.push(row); row = []; f = ''; }
+    else if (c !== '\r') f += c;
+  }
+  if (f !== '' || row.length){ row.push(f); rows.push(row); }
+  return rows;
+}
+
+/* ---------- state ---------- */
+const S = {
+  groups: [], items: [], read: {},
+  q: '', group: store.get('pgy:group') || 'all', onlyReq: false, onlyUnread: false,
+  user: null, fb: null, demo: false, source: '',
+};
+
+function buildGroups(items){
+  const groups = CONFIG.GROUPS.map(g => ({ name: g.name, color: g.color || 'opd', units: [...g.units] }));
+  for (const it of items){
+    let g = groups.find(x => x.name === it.group);
+    if (!g){ g = { name: it.group, color: ['opd','ipd','clin'][groups.length % 3], units: [] }; groups.push(g); }
+    if (!g.units.includes(it.unit)) g.units.push(it.unit);
+  }
+  return groups;
+}
+
+function makeItem(o){
+  const mod = parseDate(o.mod);
+  return {
+    group: (o.group||'').trim() || '未分類', unit: (o.unit||'').trim() || '其他',
+    title: (o.title||'').trim() || '（未命名教材）', link: (o.link||'').trim(),
+    type: (o.type||'').trim(), required: yes(o.req), desc: (o.desc||'').trim(),
+    owner: (o.owner||'').trim(), mod, id: idFor(o.link, o.title),
+  };
+}
+
+function rowsToItems(rows){
+  if (!rows.length) return [];
+  const head = rows[0].map(h => h.trim());
+  const col = (...names) => { for (const n of names){ const i = head.indexOf(n); if (i >= 0) return i; } return -1; };
+  const c = {
+    group: col('組別'), unit: col('項目'), title: col('教材名稱','名稱'), link: col('連結','網址'),
+    type: col('類型'), req: col('必讀'), desc: col('說明','備註'), owner: col('負責人'),
+    mod: col('最後修改','最後修改日期'), show: col('顯示'),
+  };
+  const get = (r, k) => c[k] >= 0 ? (r[c[k]] || '') : '';
+  return rows.slice(1)
+    .filter(r => r.some(x => String(x).trim()))
+    .filter(r => !no(get(r,'show')))
+    .filter(r => get(r,'title').trim() || get(r,'link').trim())
+    .map(r => makeItem({ group:get(r,'group'), unit:get(r,'unit'), title:get(r,'title'), link:get(r,'link'),
+      type:get(r,'type'), req:get(r,'req'), desc:get(r,'desc'), owner:get(r,'owner'), mod:get(r,'mod') }));
+}
+
+async function loadItems(){
+  if (!CONFIG.SHEET_CSV_URL){
+    S.demo = true;
+    return DEMO.map(([group,unit,title,type,req,desc,owner,mod]) => makeItem({group,unit,title,link:'',type,req,desc,owner,mod}));
+  }
+  const url = CONFIG.SHEET_CSV_URL + (CONFIG.SHEET_CSV_URL.includes('?') ? '&' : '?') + '_=' + Date.now();
+  try {
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const text = await res.text();
+    if (/^\s*</.test(text)) throw new Error('取得的不是 CSV，請確認試算表已「發布到網路」並選擇 CSV 格式');
+    store.set('pgy:csv', text);
+    return rowsToItems(parseCSV(text));
+  } catch (e){
+    const cached = store.get('pgy:csv');
+    if (cached){ S.source = 'cache'; return rowsToItems(parseCSV(cached)); }
+    throw e;
+  }
+}
+
+/* ---------- progress ---------- */
+const readKey = () => S.user ? 'pgy:read:' + S.user.uid : 'pgy:read:anon';
+let saveTimer = null;
+function persist(){
+  store.set(readKey(), S.read);
+  if (S.user && S.fb){ clearTimeout(saveTimer); saveTimer = setTimeout(saveCloud, 700); }
+}
+async function saveCloud(){
+  const { db, fs } = S.fb;
+  try {
+    await fs.setDoc(fs.doc(db, 'progress', S.user.uid), {
+      read: S.read, name: S.user.displayName || '', email: S.user.email || '', updatedAt: fs.serverTimestamp(),
+    });
+  } catch (e){ toast('進度同步失敗，已先存在這台裝置：' + (e.code || e.message)); }
+}
+async function pullCloud(){
+  const { db, fs } = S.fb;
+  const local = store.get('pgy:read:' + S.user.uid) || {};
+  const anon = store.get('pgy:read:anon') || {};
+  let cloud = {};
+  try {
+    const snap = await fs.getDoc(fs.doc(db, 'progress', S.user.uid));
+    if (snap.exists()) cloud = snap.data().read || {};
+  } catch (e){ toast('無法讀取雲端進度：' + (e.code || e.message)); }
+  S.read = { ...anon, ...local, ...cloud };
+  store.set(readKey(), S.read);
+  if (Object.keys(anon).length || Object.keys(local).some(k => !(k in cloud))){
+    store.set('pgy:read:anon', {});
+    saveCloud();
+  }
+}
+function toggleRead(id){
+  const it = S.items.find(x => x.id === id);
+  if (S.read[id]) delete S.read[id];
+  else S.read[id] = today();
+  persist();
+  render();
+  if (it && S.read[id]) toast(`已標記讀完：${it.title}`);
+}
+const isRead = it => !!S.read[it.id];
+const updatedSinceRead = it => {
+  const r = S.read[it.id]; if (!r || !it.mod) return false;
+  return fmtDate(it.mod) > r;
+};
+
+/* ---------- auth (Firebase) ---------- */
+const inAppBrowser = () => /Line\/|FBAN|FBAV|Instagram|MicroMessenger/i.test(navigator.userAgent);
+async function initAuth(){
+  if (!CONFIG.FIREBASE){ S.read = store.get('pgy:read:anon') || {}; return; }
+  try {
+    const base = 'https://www.gstatic.com/firebasejs/10.12.2/';
+    const [appM, auth, fs] = await Promise.all([
+      import(base + 'firebase-app.js'), import(base + 'firebase-auth.js'), import(base + 'firebase-firestore.js'),
+    ]);
+    const app = appM.initializeApp(CONFIG.FIREBASE);
+    S.fb = { auth: auth.getAuth(app), db: fs.getFirestore(app), A: auth, fs };
+    try { await auth.getRedirectResult(S.fb.auth); } catch (e){ authError(e); }
+    auth.onAuthStateChanged(S.fb.auth, async user => {
+      S.user = user;
+      if (user) await pullCloud();
+      else S.read = store.get('pgy:read:anon') || {};
+      render();
+    });
+  } catch (e){
+    S.read = store.get('pgy:read:anon') || {};
+    toast('登入功能載入失敗，進度暫存在這台裝置');
+  }
+}
+async function signIn(){
+  if (!S.fb){
+    toast(CONFIG.FIREBASE ? '登入功能載入中，請稍候再試' : '示範頁尚未設定 Google 登入，進度目前存在這台裝置');
+    return;
+  }
+  if (inAppBrowser()){
+    showNotice('<b>請改用瀏覽器開啟。</b> LINE、Facebook 等 App 內建瀏覽器無法登入 Google，請點右上角選單，選「以預設瀏覽器開啟」（Safari 或 Chrome）。');
+    return;
+  }
+  const { A, auth } = S.fb;
+  const provider = new A.GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: 'select_account' });
+  try { await A.signInWithPopup(auth, provider); }
+  catch (e){
+    if (e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment'){
+      try { await A.signInWithRedirect(auth, provider); } catch (e2){ authError(e2); }
+    } else authError(e);
+  }
+}
+function authError(e){
+  const map = {
+    'auth/unauthorized-domain': '這個網址尚未加入 Firebase 的授權網域',
+    'auth/popup-closed-by-user': '登入視窗已關閉',
+    'auth/cancelled-popup-request': '',
+    'auth/network-request-failed': '網路連線失敗，請稍後再試',
+  };
+  const msg = e.code in map ? map[e.code] : ('登入失敗：' + (e.code || e.message));
+  if (msg) toast(msg);
+}
+async function signOutUser(){ await S.fb.A.signOut(S.fb.auth); toast('已登出'); }
+
+/* ---------- render ---------- */
+function filtered(){
+  const q = S.q.trim().toLowerCase();
+  return S.items.filter(it => {
+    if (!q && S.group !== 'all' && it.group !== S.group) return false;
+    if (S.onlyUnread && isRead(it)) return false;
+    if (q){
+      const hay = [it.title, it.unit, it.group, it.desc, it.type].join(' ').toLowerCase();
+      if (!q.split(/\s+/).every(w => hay.includes(w))) return false;
+    }
+    return true;
+  });
+}
+function hl(text){
+  const s = esc(text); const q = S.q.trim();
+  if (!q) return s;
+  let out = s;
+  for (const w of q.split(/\s+/).filter(Boolean)){
+    const re = new RegExp(esc(w).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+    out = out.replace(re, m => `<mark>${m}</mark>`);
+  }
+  return out;
+}
+const stats = list => {
+  const total = list.length, read = list.filter(isRead).length;
+  const req = list.filter(i => i.required), reqRead = req.filter(isRead).length;
+  return { total, read, pct: total ? Math.round(read/total*100) : 0, reqTotal: req.length, reqRead };
+};
+const gColor = g => `--g:var(--${g.color})`;
+const slug = s => 'u-' + hash(s);
+
+function renderAccount(){
+  const el = $('#account');
+  if (S.user){
+    const u = S.user, initial = esc((u.displayName || u.email || '?').trim()[0]);
+    el.innerHTML = `<span class="avatar">${u.photoURL ? `<img src="${esc(u.photoURL)}" alt="" referrerpolicy="no-referrer">` : initial}</span>
+      <span class="acct-name">${esc(u.displayName || u.email)}</span>
+      <button class="btn" type="button" id="btnOut">登出</button>`;
+    $('#btnOut').onclick = signOutUser;
+  } else {
+    el.innerHTML = `<button class="btn primary" type="button" id="btnIn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+      登入儲存紀錄</button>`;
+    $('#btnIn').onclick = signIn;
+  }
+}
+
+function renderNav(){
+  const all = stats(S.items);
+  const pressed = n => String(S.group === n);
+  $('#chips').innerHTML = [
+    `<button class="chip" type="button" data-group="all" aria-pressed="${pressed('all')}">全部 <span class="mono">${all.pct}%</span></button>`,
+    ...S.groups.map(g => { const s = stats(S.items.filter(i => i.group === g.name));
+      return `<button class="chip" type="button" data-group="${esc(g.name)}" aria-pressed="${pressed(g.name)}">${esc(g.name)} <span class="mono">${s.pct}%</span></button>`; }),
+  ].join('');
+
+  $('#rail').innerHTML = `<button class="rail-all" type="button" data-group="all" aria-pressed="${pressed('all')}"><span>全部教材</span><span class="mono pct">${all.read}/${all.total}</span></button>` +
+    S.groups.map(g => {
+      const gi = S.items.filter(i => i.group === g.name), s = stats(gi);
+      return `<div style="${gColor(g)}">
+        <button class="rail-group" type="button" data-group="${esc(g.name)}" aria-pressed="${pressed(g.name)}">
+          <span class="row"><span class="name"><span class="dot"></span>${esc(g.name)}</span><span class="mono pct">${s.pct}%</span></span>
+          <span class="bar"><i style="width:${s.pct}%"></i></span>
+        </button>
+        <ul class="rail-units">${g.units.map(u => { const us = stats(gi.filter(i => i.unit === u));
+          return `<li><a href="#${slug(g.name + u)}" data-group-link="${esc(g.name)}"><span>${esc(u)}</span><span class="mono">${us.read}/${us.total}</span></a></li>`; }).join('')}</ul>
+      </div>`;
+    }).join('');
+}
+
+function renderOverview(){
+  const s = stats(S.items);
+  const who = S.user ? `${esc(S.user.displayName || '你')}的閱讀進度` : '我的閱讀進度';
+  const hint = !S.user ? '<p class="ov-hint">按右上角「登入儲存紀錄」，用 Google 帳號登入後，進度會跨裝置保存。</p>' : '';
+  $('#overview').innerHTML = `
+    <div class="panel ov">
+      <div>
+        <h3>${who}</h3>
+        <div class="big">
+          <span class="num">${s.pct}<small>%</small></span>
+          <p>已讀 <b>${s.read}</b> / ${s.total} 份教材</p>
+        </div>
+        ${hint}
+      </div>
+      <div class="gbars">${S.groups.map(g => { const gs = stats(S.items.filter(i => i.group === g.name));
+        return `<div class="gbar" style="${gColor(g)}"><span>${esc(g.name)}</span><span class="bar"><i style="width:${gs.pct}%"></i></span><span class="mono">${gs.read}/${gs.total}</span></div>`; }).join('')}</div>
+    </div>`;
+}
+
+function itemHTML(it, g){
+  const read = isRead(it), cutoff = Date.now() - CONFIG.NEW_DAYS * 864e5;
+  const isNew = it.mod && it.mod.getTime() >= cutoff;
+  const fbUrl = CONFIG.FEEDBACK_FORM_URL
+    ? (CONFIG.FEEDBACK_PREFILL_ENTRY
+        ? CONFIG.FEEDBACK_FORM_URL.split('?')[0] + '?usp=pp_url&' + CONFIG.FEEDBACK_PREFILL_ENTRY + '=' + encodeURIComponent(`${it.unit}｜${it.title}`)
+        : CONFIG.FEEDBACK_FORM_URL)
+    : '';
+  const title = it.link
+    ? `<a class="item-title" href="${esc(it.link)}" target="_blank" rel="noopener">${hl(it.title)}</a>`
+    : `<span class="item-title">${hl(it.title)}</span>`;
+  return `<li class="item${read ? ' read' : ''}" style="${gColor(g)}">
+    <button class="check" type="button" data-read="${esc(it.id)}" aria-pressed="${read}" aria-label="${read ? '取消已讀' : '標記為已讀'}：${esc(it.title)}" title="${read ? `${S.read[it.id]} 標記已讀` : '標記為已讀'}">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>
+    </button>
+    <div style="min-width:0">
+      ${title}
+      ${it.desc ? `<p class="item-desc">${hl(it.desc)}</p>` : ''}
+      <div class="meta">
+        ${it.type ? `<span class="tag">${hl(it.type)}</span>` : ''}
+        ${updatedSinceRead(it) ? '<span class="tag warn">讀過後有更新</span>' : isNew ? '<span class="tag new">近期更新</span>' : ''}
+        ${it.mod ? `<span>最後修改 <time>${fmtDate(it.mod)}</time></span>` : ''}
+      </div>
+    </div>
+    <div class="actions">
+      <a class="open" href="${esc(it.link || '#')}" target="_blank" rel="noopener" ${it.link ? '' : 'aria-disabled="true" tabindex="-1"'}>開啟
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+      <a class="fb" href="${esc(fbUrl || '#')}" target="_blank" rel="noopener" ${fbUrl ? '' : 'aria-disabled="true" tabindex="-1" title="尚未設定回饋表單"'} aria-label="回饋：${esc(it.title)}">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1.1-4.6A8 8 0 1 1 21 12Z"/></svg>回饋</a>
+    </div>
+  </li>`;
+}
+
+function renderSections(){
+  const list = filtered();
+  const searching = !!S.q.trim(), narrowing = searching || S.onlyUnread;
+  $('#count').textContent = searching ? `找到 ${list.length} 份教材` : `${list.length} 份教材`;
+  const groups = (searching || S.group === 'all') ? S.groups : S.groups.filter(g => g.name === S.group);
+  let html = '';
+  for (const g of groups){
+    const gi = list.filter(i => i.group === g.name);
+    if (narrowing && !gi.length) continue;
+    const gs = stats(S.items.filter(i => i.group === g.name));
+    html += `<div class="group-band" style="${gColor(g)}"><h2>${esc(g.name)}</h2><span class="mono">${g.units.length} 個項目・已讀 ${gs.read}/${gs.total}</span></div>`;
+    for (const u of g.units){
+      const ui = gi.filter(i => i.unit === u);
+      if (narrowing && !ui.length) continue;
+      const us = stats(S.items.filter(i => i.group === g.name && i.unit === u));
+      html += `<section class="unit" id="${slug(g.name + u)}" style="${gColor(g)}">
+        <div class="unit-head"><h3><span class="dot"></span>${hl(u)}</h3><span class="mono">${us.read}/${us.total}</span></div>
+        ${ui.length ? `<ul class="items">${ui.map(i => itemHTML(i, g)).join('')}</ul>` : '<div class="unit-empty">這個項目的教材準備中。</div>'}
+      </section>`;
+    }
+  }
+  if (!html){
+    html = `<div class="no-result">${searching ? `找不到和「${esc(S.q.trim())}」有關的教材，試試其他關鍵字。` : '目前篩選條件下沒有教材。'}</div>`;
+  }
+  $('#sections').innerHTML = html;
+}
+
+function render(){
+  document.title = CONFIG.SITE_TITLE;
+  $('#siteTitle').textContent = CONFIG.SITE_TITLE;
+  renderAccount(); renderNav(); renderOverview(); renderSections();
+  $('#fUnread').setAttribute('aria-pressed', S.onlyUnread);
+}
+
+/* ---------- ui ---------- */
+let toastTimer;
+function toast(msg){ const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2600); }
+function showNotice(html){ const n = $('#notice'); n.innerHTML = html; n.hidden = false; }
+function setGroup(g){ S.group = g; store.set('pgy:group', g); render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+document.addEventListener('click', e => {
+  const r = e.target.closest('[data-read]'); if (r){ toggleRead(r.dataset.read); return; }
+  const g = e.target.closest('[data-group]'); if (g){ setGroup(g.dataset.group); return; }
+  const l = e.target.closest('[data-group-link]');
+  if (l && S.group !== 'all' && S.group !== l.dataset.groupLink){ S.group = l.dataset.groupLink; render(); }
+});
+let qTimer;
+$('#q').addEventListener('input', e => { clearTimeout(qTimer); qTimer = setTimeout(() => { S.q = e.target.value; renderSections(); renderNav(); }, 120); });
+$('#fUnread').onclick = () => { S.onlyUnread = !S.onlyUnread; render(); };
+document.addEventListener('keydown', e => {
+  if (e.key === '/' && document.activeElement.tagName !== 'INPUT'){ e.preventDefault(); $('#q').focus(); }
+});
+const head = $('.top');
+const setHead = () => document.documentElement.style.setProperty('--head-h', head.offsetHeight + 'px');
+if ('ResizeObserver' in window) new ResizeObserver(setHead).observe(head); setHead();
+
+/* ---------- start ---------- */
+(async function start(){
+  if (!S.groups.length) S.groups = buildGroups([]);
+  const authReady = initAuth();
+  try {
+    S.items = await loadItems();
+  } catch (e){
+    S.items = [];
+    showNotice(`<b>無法讀取教材清單。</b> ${esc(e.message)}。請確認試算表已「發布到網路」，或稍後重新整理。`);
+  }
+  S.groups = buildGroups(S.items);
+  if (S.group !== 'all' && !S.groups.some(g => g.name === S.group)) S.group = 'all';
+  if (S.demo) showNotice('<b>目前顯示示範資料。</b> 在設定區填入試算表 CSV 網址後，就會改為讀取你們的教材清單。');
+  else if (S.source === 'cache') showNotice('<b>網路連線不穩，</b>目前顯示上次載入的教材清單。');
+  await authReady;
+  render();
+})();
+</script>
+</body>
+</html>
